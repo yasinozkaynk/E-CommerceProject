@@ -31,5 +31,6 @@ namespace Business.Constants
     {
         public static string ProductImageLimitExceeded = "En Fazla 5 Resim Ekleyebilirsiniz";
         public static string NoPicture = "Resim yok";
+        public static string PictureAdded = "Resim eklendi";
     }
 }
