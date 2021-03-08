@@ -35,7 +35,7 @@ namespace Business.Concrete
                 return result;
             }
             productImage.ImagePath = FileHelper.Add(file);
-            productImage.Date = DateTime.Now;
+            //productImage.Date = DateTime.Now;
             _productImageDal.Add(productImage);
             return new SuccessResult();
         }
