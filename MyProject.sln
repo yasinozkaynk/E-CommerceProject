@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entiti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleUI", "ConsoleUI\ConsoleUI.csproj", "{7840A1DD-4C80-4A29-8F9D-577398E0CC91}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Busines", "Businesss\Busines.csproj", "{9186FBD7-8373-42F9-8534-4E15BD80443C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business", "Businesss\Business.csproj", "{9186FBD7-8373-42F9-8534-4E15BD80443C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccesss\DataAccess.csproj", "{FD1B4DF7-03D1-4310-A4AA-FEFC05BC0E90}"
 EndProject
