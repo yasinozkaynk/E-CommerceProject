@@ -33,7 +33,7 @@ namespace Business.BusinessAspects.Autoface
                     return;
                 }
             }
-            throw new Exception(Messages.AuthorizationDenied);
+            throw new Exception(SystemMessages.AuthorizationDenied);
         }
     }
 }

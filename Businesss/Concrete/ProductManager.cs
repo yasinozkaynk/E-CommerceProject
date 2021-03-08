@@ -43,7 +43,7 @@ namespace Business.Concrete
             IResult result = BusinessRules.Run
                 (CheckIfProductNameExist(product.ProductName),
                  CheckIfProductCountCetegoryCorrect(product.CategoryId));
-                 //CheckIfCategoryLimitExceded());
+                 CheckIfCategoryLimitExceded();
 
             if (result!=null)
             {
@@ -51,7 +51,7 @@ namespace Business.Concrete
             }
 
             _productDal.Add(product);
-            return new SuccessResult(Messages.ProductAdded);
+            return new SuccessResult(ProductMessages.ProductAdded);
 
         }
 
@@ -60,9 +60,9 @@ namespace Business.Concrete
         {
             if (DateTime.Now.Hour == 17)
             {
-                return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
+                return new ErrorDataResult<List<Product>>(SystemMessages.MaintenanceTime);
             }
-            return new SuccessDataResult<List<Product>>(_productDal.GetAll(), Messages.ProductsListed);
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(), ProductMessages.ProductsListed);
         }
 
         public IDataResult<List<Product>> GetAllByCategoryId(int id)
@@ -103,7 +103,7 @@ namespace Business.Concrete
             var result = _productDal.GetAll(p => p.CategoryId == categoryId).Count;
             if (result >= 30)
             {
-                return new ErrorResult(Messages.ProductCountOfCategoryError);
+                return new ErrorResult(ProductMessages.ProductCountOfCategoryError);
             }
             return new SuccessResult();
         }
@@ -112,16 +112,16 @@ namespace Business.Concrete
             var result = _productDal.GetAll(p => p.ProductName == productName).Any();
             if (result == true)
             {
-                return new ErrorResult(Messages.ProductNameAlreadyExists);
+                return new ErrorResult(ProductMessages.ProductNameAlreadyExists);
             }
             return new SuccessResult();
         }
         private IResult CheckIfCategoryLimitExceded()
         {
             var result = _categoryService.GetAll();
-            if (result.Data.Count>10)
+            if (result.Data.Count>100)
             {
-                return new ErrorResult(Messages.CategoryLimitExceded);
+                return new ErrorResult(ProductMessages.CategoryLimitExceded);
             }
             return new SuccessResult();
         }
@@ -132,7 +132,7 @@ namespace Business.Concrete
             Add(product);
             if (product.UnitPrice<10)
             {
-                throw new Exception("");
+                throw new Exception();
             }
             Add(product);
             return null;

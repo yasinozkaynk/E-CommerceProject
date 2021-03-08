@@ -1,4 +1,5 @@
 ﻿using Business.Apstract;
+using Business.Constants;
 using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using Core.Utilities.Securty.Hashing;
@@ -32,7 +33,7 @@ namespace Business.Concrete
                 Status = true
             };
             _userService.Add(user);
-            return new SuccessDataResult<User>(user,"Kayıt olundu");
+            return new SuccessDataResult<User>(user, AuthMessages.Registered);
         }
 
         public IDataResult<User> Login(UserForLoginDto userForLoginDto)
@@ -42,20 +43,19 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<User>();
             }
-
-            if (!HashingHelper.VerifyPasswordHash(userForLoginDto.Password, userToCheck.PasswordHash, userToCheck.PasswordSalt))
+            if (!HashingHelper.VerifyPasswordHash(userForLoginDto.Password, userToCheck.Data.PasswordHash, userToCheck.Data.PasswordSalt))
             {
                 return new ErrorDataResult<User>();
             }
 
-            return new SuccessDataResult<User>(userToCheck,"giriş yapıldı");
+            return new SuccessDataResult<User>(userToCheck.Data, AuthMessages.Login);
         }
 
         public IResult UserExists(string email)
         {
             if (_userService.GetByMail(email) != null)
             {
-                return new ErrorResult("kullanıcı mevcut");
+                return new ErrorResult(AuthMessages.UserAvailable);
             }
             return new SuccessResult();
         }
@@ -63,8 +63,8 @@ namespace Business.Concrete
         public IDataResult<AccessToken> CreateAccessToken(User user)
         {
             var claims = _userService.GetClaims(user);
-            var accessToken = _tokenHelper.CreateToken(user, claims);
-            return new SuccessDataResult<AccessToken>(accessToken,"token oluşturuldu");
+            var accessToken = _tokenHelper.CreateToken(user,claims.Data);
+            return new SuccessDataResult<AccessToken>(accessToken,AuthMessages.TokenCreated);
         }
     }
 }
