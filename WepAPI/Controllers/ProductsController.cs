@@ -27,15 +27,15 @@ namespace WepAPI.Controllers
             var result = _productService.GetAll();
             if (result.Success)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
-            return BadRequest(result);
+            return BadRequest(result.Message);
         }
         [HttpPost("add")]
         public IActionResult Add(Product product)
-        {       
+        {
             var result = _productService.Add(product);
-            if (result.Success==true)
+            if (result.Success == true)
             {
                 return Ok(result);
             }
@@ -46,12 +46,23 @@ namespace WepAPI.Controllers
         public IActionResult GetById(int id)
         {
             var result = _productService.GetById(id);
-            if (result .Success)
+            if (result.Success)
             {
-                return Ok(result.Data);          
+                return Ok(result.Data);
+            }
+            return BadRequest(result);
+        }
+        [HttpGet("getbycategory")]
+        public IActionResult GetByCategory(int categoryId)
+        {
+            var result = _productService.GetAllByCategoryId(categoryId);
+            if (result.Success)
+            {
+                return Ok(result);
             }
             return BadRequest(result);
         }
 
     }
+
 }

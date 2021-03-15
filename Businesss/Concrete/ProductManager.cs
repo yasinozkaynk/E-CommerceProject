@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace Business.Concrete
 { 
@@ -55,19 +56,20 @@ namespace Business.Concrete
 
         }
 
-        [CacheAspect]
         public IDataResult<List<Product>> GetAll()
         {
-            if (DateTime.Now.Hour == 17)
+            if (DateTime.Now.Hour == 6)
             {
                 return new ErrorDataResult<List<Product>>(SystemMessages.MaintenanceTime);
             }
+            Thread.Sleep(3000);
+
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(), ProductMessages.ProductsListed);
         }
 
-        public IDataResult<List<Product>> GetAllByCategoryId(int id)
+        public IDataResult<List<Product>> GetAllByCategoryId(int categoryId )
         {
-            return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.CategoryId == id));
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.CategoryId == categoryId));
         }
 
         [PerformanceAspect(10)]//bu method 10 saniye üstünde çalışırsa benbi uyar
@@ -86,6 +88,7 @@ namespace Business.Concrete
 
             return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetailDtos());
         }
+
         [ValidationAspect(typeof(ProductValidator))]
         [CacheRemoveAspect("IProductService.Get")]
         public IResult Update(Product product)
