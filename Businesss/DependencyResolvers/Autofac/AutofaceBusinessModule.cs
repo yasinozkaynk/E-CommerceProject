@@ -36,6 +36,9 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<ProductImageManager>().As<IProductImageService>().SingleInstance();
             builder.RegisterType<EfProductImageDal>().As<IProductImageDal>().SingleInstance();
 
+            builder.RegisterType<ProductReviewsManager>().As<IProductReviewsService>().SingleInstance();
+            builder.RegisterType<EfProductReviewsDal>().As<IProductReviewsDal>().SingleInstance();
+
 
 
 

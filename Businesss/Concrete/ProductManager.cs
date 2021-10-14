@@ -41,52 +41,49 @@ namespace Business.Concrete
         [CacheRemoveAspect("IProductService.Get")]
         public IResult Add(Product product)
         {
-            IResult result = BusinessRules.Run
-                (CheckIfProductNameExist(product.ProductName),
-                 CheckIfProductCountCetegoryCorrect(product.CategoryId));
-                 CheckIfCategoryLimitExceded();
+            ////IResult result = BusinessRules.Run
+            //    (CheckIfProductNameExist(product.ProductName),
+            //     CheckIfProductCountCetegoryCorrect(product.CategoryId));
+            //     CheckIfCategoryLimitExceded();
 
-            if (result!=null)
-            {
-                return result;
-            }
+            //if (result!=null)
+            //{
+            //    return result;
+            //}
 
             _productDal.Add(product);
             return new SuccessResult(ProductMessages.ProductAdded);
 
         }
 
-        public IDataResult<List<Product>> GetAll()
+
+        public IDataResult<List<ProductDto>> GetAll()
         {
-            if (DateTime.Now.Hour == 6)
+            IResult resullt = BusinessRules.Run();
+            if (resullt != null)
             {
-                return new ErrorDataResult<List<Product>>(SystemMessages.MaintenanceTime);
+                return (IDataResult<List<ProductDto>>)resullt;
             }
-            Thread.Sleep(3000);
 
-            return new SuccessDataResult<List<Product>>(_productDal.GetAll(), ProductMessages.ProductsListed);
+            return new SuccessDataResult<List<ProductDto>>(_productDal.GetAllProductDetailDtos(), ProductMessages.ProductsListed);
         }
 
-        public IDataResult<List<Product>> GetAllByCategoryId(int categoryId )
+
+        public IDataResult<List<ProductDto>> GetAllByCategoryId(int categoryId )
         {
-            return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.CategoryId == categoryId));
+            return new SuccessDataResult<List<ProductDto>>(_productDal.GetAllProductDetailDtos(p =>p.CategoryId == categoryId));
         }
 
-        [PerformanceAspect(10)]//bu method 10 saniye üstünde çalışırsa benbi uyar
-        public IDataResult<Product> GetById(int productId)
-        {
-            return new SuccessDataResult<Product>(_productDal.Get(p => p.ProductId == productId));
-        }
 
         public IDataResult<List<Product>> GetByUnitPrice(decimal min, decimal max)
         {
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.UnitPrice >= min && p.UnitPrice < max));
         }
 
-        public IDataResult<List<ProductDetailDto>> productDetaDtos()
+        public IDataResult<List<ProductDto>> productDetaDtos(int productId)
         {
 
-            return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetailDtos());
+            return new SuccessDataResult<List<ProductDto>>(_productDal.GetAllProductDetailDtos(p=>p.ProductId==productId));
         }
 
         [ValidationAspect(typeof(ProductValidator))]
@@ -139,6 +136,27 @@ namespace Business.Concrete
             }
             Add(product);
             return null;
+        }
+
+        public IDataResult<List<Product>> GetAllById(int categoryId)
+        {
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.CategoryId == categoryId));
+        }
+
+        public IDataResult<List<ProductDto>> GetByUnitsPrice()
+        {
+            return new SuccessDataResult<List<ProductDto>>(_productDal.GetAllProductDetailDtos(x=>x.UnitPrice<=30));
+
+        }
+
+        public IDataResult<List<ProductDetailDto>> productCommentDtos(int productId)
+        {
+            return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductsCommentDtos(x=>x.ProductId==productId));
+        }
+
+        public IDataResult<List<ProductUser>> UserId(int userId)
+        {
+            return new SuccessDataResult<List<ProductUser>>(_productDal.GetAllProductUser(x => x.UserId == userId));
         }
     }
 }

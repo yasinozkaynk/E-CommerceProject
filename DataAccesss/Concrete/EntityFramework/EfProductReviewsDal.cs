@@ -7,8 +7,7 @@ using System.Text;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfProductImageDal :EfEntityRepositoryBase<ProductImagePath,NorthwindContext>,IProductImageDal
+    public class EfProductReviewsDal:EfEntityRepositoryBase<ProductComment,NorthwindContext>,IProductReviewsDal
     {
-
     }
 }

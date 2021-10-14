@@ -20,7 +20,9 @@ namespace DataAccess.Concrete.EntityFramework
         public DbSet<OperationClaim> OperationClaims { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
-        public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<ProductImagePath> ProductImages { get; set; }
+        public DbSet<ProductComment> Comments { get; set; }
+
 
     }
 }

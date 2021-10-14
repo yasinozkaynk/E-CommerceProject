@@ -26,64 +26,63 @@ namespace Business.Concrete
         }
 
        // [SecuredOperation("carImages.add,admin")]
-        public IResult Add(IFormFile file,ProductImage productImage)
+        public IResult Add(IFormFile file,ProductImagePath productImage)
         {
-
-            IResult result = BusinessRules.Run(CheckIfProductImageLimit(productImage.ProductId));
-            if (result != null)
-            {
-                return result;
-            }
-            productImage.ImagePath = FileHelper.Add(file);
+            //IResult result = BusinessRules.Run(CheckIfProductImageLimit(productImage.ProductId));
+            //if (result != null)
+            //{
+            //    return result;
+            //}
+            productImage.ProductImage = FileHelper.Add(file);
             productImage.Date = DateTime.Now;
             _productImageDal.Add(productImage);
             return new SuccessResult(ProductImageMessage.PictureAdded);
         }
 
         [SecuredOperation("Admin")]
-        public IResult Delete(IFormFile file,ProductImage productImage)
+        public IResult Delete(IFormFile file,ProductImagePath productImage)
         {
-            FileHelper.Delete(productImage.ImagePath);
+            FileHelper.Delete(productImage.ProductImage);
             _productImageDal.Delete(productImage);
             return new SuccessResult();
         }
 
         [SecuredOperation("Admin")]
-        public IResult Update(IFormFile file,ProductImage productImage)
+        public IResult Update(IFormFile file,ProductImagePath productImage)
         {
             IResult result = BusinessRules.Run();
             if (result != null)
             {
                 return result;
             }
-            productImage.ImagePath = FileHelper.Update(_productImageDal.Get(p => p.Id ==productImage.Id).ImagePath, file);
+            productImage.ProductImage = FileHelper.Update(_productImageDal.Get(p => p.Id ==productImage.Id).ProductImage, file);
             productImage.Date = DateTime.Now;
             _productImageDal.Update(productImage);
             return new SuccessResult();
         }
 
-        public IDataResult<ProductImage> Get(int id)
+        public IDataResult<ProductImagePath> Get(int id)
         {
-            return new SuccessDataResult<ProductImage>(_productImageDal.Get(p => p.Id == id));
+            return new SuccessDataResult<ProductImagePath>(_productImageDal.Get(p => p.Id == id));
         }
 
-        public IDataResult<List<ProductImage>> GetAll()
+        public IDataResult<List<ProductImagePath>> GetAll()
         {
-            return new SuccessDataResult<List<ProductImage>>(_productImageDal.GetAll());
+            return new SuccessDataResult<List<ProductImagePath>>(_productImageDal.GetAll());
         }
 
-        public IDataResult<List<ProductImage>> GetImagesByProductId(int id)
+        public IDataResult<List<ProductImagePath>> GetImagesByProductId(int id)
         {
             IResult result = BusinessRules.Run(CheckIfProductImageNull(id));
 
             if (result != null)
             {
-                return new ErrorDataResult<List<ProductImage>>(result.Message);
+                return new ErrorDataResult<List<ProductImagePath>>(result.Message);
             }
 
-            return new SuccessDataResult<List<ProductImage>>(CheckIfProductImageNull(id).Data);
+            return new SuccessDataResult<List<ProductImagePath>>(CheckIfProductImageNull(id).Data);
         }
-        private IDataResult<List<ProductImage>> CheckIfProductImageNull(int id)
+        private IDataResult<List<ProductImagePath>> CheckIfProductImageNull(int id)
         {
             try
             {
@@ -91,18 +90,18 @@ namespace Business.Concrete
                 var result = _productImageDal.GetAll(c => c.ProductId == id).Any();
                 if (!result)
                 {
-                    List<ProductImage> productImages = new List<ProductImage>();
-                    productImages.Add(new ProductImage { ProductId = id, ImagePath = path, Date = DateTime.Now });
-                    return new SuccessDataResult<List<ProductImage>>(productImages);
+                    List<ProductImagePath> productImages = new List<ProductImagePath>();
+                    productImages.Add(new ProductImagePath { ProductId = id, ProductImage = path, Date = DateTime.Now });
+                    return new SuccessDataResult<List<ProductImagePath>>(productImages);
                 }
             }
             catch (Exception exception)
             {
 
-                return new ErrorDataResult<List<ProductImage>>(exception.Message);
+                return new ErrorDataResult<List<ProductImagePath>>(exception.Message);
             }
 
-            return new SuccessDataResult<List<ProductImage>>( _productImageDal.GetAll(p=>p.Id==id).ToList());
+            return new SuccessDataResult<List<ProductImagePath>>( _productImageDal.GetAll(p=>p.Id==id).ToList());
            
         }
 

@@ -31,6 +31,16 @@ namespace WepAPI.Controllers
             }
             return BadRequest(result.Message);
         }
+        [HttpGet("getbyunitsprice")]
+        public IActionResult GetByUnitsPrice()
+        {
+            var result = _productService.GetByUnitsPrice();
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result.Message);
+        }
         [HttpPost("add")]
         public IActionResult Add(Product product)
         {
@@ -41,17 +51,38 @@ namespace WepAPI.Controllers
             }
             return BadRequest(result);
         }
+        [HttpPost("update")]
+        public IActionResult Update(Product product)
+        {
+            var result = _productService.Update(product);
+            if (result.Success == true)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
 
         [HttpGet("getbyid")]
         public IActionResult GetById(int id)
         {
-            var result = _productService.GetById(id);
+            var result = _productService.productDetaDtos(id);
             if (result.Success)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
             return BadRequest(result);
         }
+        [HttpGet("userid")]
+        public IActionResult GetByUser(int id)
+        {
+            var result = _productService.UserId(id);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
         [HttpGet("getbycategory")]
         public IActionResult GetByCategory(int categoryId)
         {
@@ -62,7 +93,16 @@ namespace WepAPI.Controllers
             }
             return BadRequest(result);
         }
-
+        [HttpGet("id")]
+        public IActionResult GetByComment(int productId)
+        {
+            var result = _productService.productCommentDtos(productId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 
 }

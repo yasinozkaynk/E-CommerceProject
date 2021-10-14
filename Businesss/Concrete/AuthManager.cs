@@ -5,6 +5,7 @@ using Core.Utilities.Results;
 using Core.Utilities.Securty.Hashing;
 using Core.Utilities.Securty.JWT;
 using Entities.DTOs;
+using System.Threading;
 
 namespace Business.Concrete
 {
@@ -33,7 +34,25 @@ namespace Business.Concrete
                 Status = true
             };
             _userService.Add(user);
-            return new SuccessDataResult<User>(user, AuthMessages.Registered);
+            return new SuccessDataResult<User>(user, "Kayıt oldu");
+        }
+
+        public IDataResult<User> Update(UserForRegisterDto userForRegisterDto, string password)
+        {
+            byte[] passwordHash, passwordSalt;
+            HashingHelper.CreatePasswordHash(password, out passwordHash, out passwordSalt);
+            var user = new User
+            {
+                Id=userForRegisterDto.Id,
+                Email = userForRegisterDto.Email,
+                FirstName = userForRegisterDto.FirstName,
+                LastName = userForRegisterDto.LastName,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt,
+                Status = true
+            };
+            _userService.Update(user);
+            return new SuccessDataResult<User>(user, "Güncelleme Başarılı");
         }
 
         public IDataResult<User> Login(UserForLoginDto userForLoginDto)
@@ -53,7 +72,7 @@ namespace Business.Concrete
 
         public IResult UserExists(string email)
         {
-            if (_userService.GetByMail(email) != null)
+            if (_userService.GetByMaill(email) != null)
             {
                 return new ErrorResult(AuthMessages.UserAvailable);
             }
@@ -63,8 +82,18 @@ namespace Business.Concrete
         public IDataResult<AccessToken> CreateAccessToken(User user)
         {
             var claims = _userService.GetClaims(user);
-            var accessToken = _tokenHelper.CreateToken(user,claims.Data);
-            return new SuccessDataResult<AccessToken>(accessToken,AuthMessages.TokenCreated);
+            var accessToken = _tokenHelper.CreateToken(user, claims.Data);
+            return new SuccessDataResult<AccessToken>(accessToken, AuthMessages.TokenCreated);
+        }
+
+        public IResult UserExistsId(int id)
+        {
+           var user=  _userService.GetByUser(id);
+            if (user != null)
+            {
+                return new SuccessResult();
+            }
+            return new ErrorResult();
         }
     }
 }

@@ -6,8 +6,7 @@ using System.Text;
 
 namespace DataAccess.Apstract
 {
-    public interface IProductImageDal :IEntityRepostory<ProductImagePath>
+    public interface IProductReviewsDal: IEntityRepostory<ProductComment>
     {
-
     }
 }

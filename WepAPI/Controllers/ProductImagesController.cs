@@ -21,7 +21,7 @@ namespace WepAPI.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add([FromForm(Name = ("Image"))] IFormFile file, [FromForm] ProductImage productImage)
+        public IActionResult Add([FromForm(Name = ("Image"))] IFormFile file, [FromForm] ProductImagePath productImage)
         {
             var result = _productImageService.Add(file, productImage);
             if (result.Success)

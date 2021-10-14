@@ -5,12 +5,11 @@ using System.Text;
 
 namespace Entities.Concrete
 {
-    public class ProductImagePath:IEntity
+    public class ProductComment:IEntity
     {
         public int Id { get; set; }
         public int ProductId { get; set; }
-        public string ProductImage { get; set; }
-        public DateTime Date { get; set; }
-
+        public int UserId { get; set; }
+        public string Comment { get; set; }
     }
 }

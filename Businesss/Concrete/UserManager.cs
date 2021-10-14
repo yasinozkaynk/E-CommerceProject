@@ -26,12 +26,28 @@ namespace Business.Concrete
         public IResult Add(User user)
         {
             _userDal.Add(user);
-           return new SuccessResult();
+            return new SuccessResult();
+        }
+        public IResult Update(User user)
+        {
+            _userDal.Update(user);
+            return new SuccessResult();
         }
 
-        public IDataResult<User>GetByMail(string email)
+        public IDataResult<User> GetByMail(string email)
         {
             return new SuccessDataResult<User>(_userDal.Get(u => u.Email == email));
+        }
+
+        public User GetByMaill(string email)
+        {
+           return _userDal.Get(u => u.Email == email);
+            
+        }
+
+        public IDataResult<List<User>> GetByUser(int id)
+        {
+            return new SuccessDataResult<List<User>>(_userDal.GetAll(u => u.Id == id));
         }
     }
 }
